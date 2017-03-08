@@ -1,0 +1,46 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no" />
+    <title>文件查看</title>
+
+    <link rel="stylesheet" href="lib/npstrap/css/controls.min.css" />
+    <link rel="stylesheet" href="lib/npstrap/css/general.min.css" />
+    <link rel="stylesheet" href="css/index.css" />
+
+    <script src="lib/jquery/dist/jquery.min.js"></script>
+    <script src="lib/jquery-ext/jquery.fileDownload.js"></script>
+    <script src="lib/jquery-ext/jquery.throttle-debounce.min.js"></script>
+    <script src="lib/npstrap/js/dataset_helper.js"></script>
+    <script src="lib/npstrap/js/handlerbase.js"></script>
+    <script src="lib/npstrap/js/controls.es5.min.js"></script>
+    <script src="js/index.js"></script>
+</head>
+<body>
+    <div class="main-container">
+        <div class="title-container">
+            <p class="title">文件列表</p>
+            <div id="path_container" class="path-container">
+            </div>
+        </div>
+        <div class="search-container">
+            <p>过滤</p>
+            <div>
+                <input id="input_filter" type="text" />
+                <div id="btn_reset" data-control="button" data-text="清除"></div>
+            </div>
+            <p id="p_cnts" style="margin-top: 1em">{0}个文件夹, {1}个文件</p>
+        </div>
+        <div class="list-container">
+            <div>
+                <div id="list_dirs" class="list directory">
+                </div>
+                <div id="list_files" class="list file">
+                    
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

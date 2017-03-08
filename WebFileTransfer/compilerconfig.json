@@ -1,0 +1,10 @@
+﻿[
+  {
+    "outputFile": "wwwroot/css/index.css",
+    "inputFile": "wwwroot/css/index.less"
+  },
+  {
+    "outputFile": "wwwroot/js/index.es5.js",
+    "inputFile": "wwwroot/js/index.js"
+  }
+]

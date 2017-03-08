@@ -1,0 +1,10 @@
+; visual studio configuration files
+/.vs
+
+; vscode configuration files
+/.vscode
+
+; build files
+*/bin
+*/obj
+
