@@ -7,6 +7,7 @@ using WebFileTransfer.Models;
 using System.IO;
 using System.Text.RegularExpressions;
 using Microsoft.Net.Http.Headers;
+using WebFileTransfer.Results;
 
 namespace WebFileTransfer.Controllers
 {
@@ -103,8 +104,9 @@ namespace WebFileTransfer.Controllers
                 try
                 {
                     Stream fs = System.IO.File.OpenRead(filepath);
-                    FileStreamResult fsr = new FileStreamResult(fs, "application/octet-stream");
+                    ExtFileStreamResult fsr = new ExtFileStreamResult(fs, "application/octet-stream");
                     fsr.FileDownloadName = Path.GetFileName(filepath);
+                    
                     return fsr;
                 }
                 catch
