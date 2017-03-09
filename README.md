@@ -1,18 +1,18 @@
 # WebFileTransfer
-Web端文件查看以及下载服务
+File listing and downloading service hosted in the web
 
-## 架构
+## Architecture
 asp.net core webapi
 
-## 支持
-点击查看 [.net core](https://www.microsoft.com/net/core) 支持的平台
+## Platform support
+click to check the platform supported by [.net core](https://www.microsoft.com/net/core)
 
-## 如何使用
-1. 配置根路径
+## How to use
+1. Configure the file root path
 
-    修改 appsettings.json 中的 FileRoot
+    Edit ` FileRoot ` option in file appsettings.json 
 
-2. 修改监听url和端口
+2. Configure the listening url and port
 
     Program.cs
     ``` CSharp
@@ -22,19 +22,19 @@ asp.net core webapi
                //...
     ```
 
-3. 启动程序
+3. Start dotnet core
 
     ```BAT
     dotnet run
     ```
 
 ## For dev
-- 只有一个 Controller, 后台逻辑还是比较简单
-- 前端靠ajax与后端通信
-- 使用 jquery.fileDownload 通过发送POST请求下载文件
+- There is only one `Controller`.
+- FE communicates with BE by ajax
+- `jquery.fileDownload` is included to download files through `POST` method
 
 ## Improvement remained
-- 安全性
-- 上传功能
-- 文件图标
-- 控制台log显示数据传输状态
+- Security
+- Upload files to server
+- More file icons
+- Display the requests in console window
