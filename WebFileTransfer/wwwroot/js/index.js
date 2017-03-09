@@ -109,7 +109,8 @@
         var span_size = document.createElement("span");
 
         div.className = "item";
-        img.src = "images/file.png";
+        //img.src = "images/file.png";
+        img.src = icon_helper.get_icon(file.fileExt);
         span_name.className = "itemname";
         span_name.innerText = file.name;
         span_size.className = "itemsize";

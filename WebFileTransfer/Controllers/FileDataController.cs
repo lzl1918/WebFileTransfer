@@ -126,7 +126,8 @@ namespace WebFileTransfer.Controllers
             {
                 Name = file.Name,
                 Path = file.FullName,
-                Bytes = file.Length
+                Bytes = file.Length,
+                FileExt = file.Extension
             };
         }
         private DirectoryData DirectoryDataFromInfo(DirectoryInfo directory)

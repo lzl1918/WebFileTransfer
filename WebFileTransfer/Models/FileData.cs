@@ -23,5 +23,6 @@ namespace WebFileTransfer.Models
         public string Path { get; set; }
         public string Name { get; set; }
         public long Bytes { get; set; }
+        public string FileExt { get; set; }
     }
 }
