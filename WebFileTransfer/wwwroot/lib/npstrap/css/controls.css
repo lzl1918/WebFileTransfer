@@ -132,6 +132,7 @@ textarea {
   height: 1.6em;
   border-radius: 0;
   box-shadow: none;
+  box-sizing: content-box;
   font-family: "Microsoft YaHei", "微软雅黑";
 }
 textarea {

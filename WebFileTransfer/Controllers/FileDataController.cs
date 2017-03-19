@@ -19,6 +19,8 @@ namespace WebFileTransfer.Controllers
         [HttpPost]
         public ServiceData Data([FromBody] PathParam path)
         {
+            
+
             if (GlobalConfig.Enabled == false)
                 return null;
 
