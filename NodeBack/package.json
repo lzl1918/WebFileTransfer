@@ -1,0 +1,12 @@
+{
+  "name": "node-back",
+  "version": "0.0.0",
+  "description": "NodeBack",
+  "main": "server.js",
+  "author": {
+    "name": "Hake"
+  },
+  "dependencies": {
+    "mime": "1.3.4"
+  }
+}
