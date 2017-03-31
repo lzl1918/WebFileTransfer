@@ -26,16 +26,15 @@
     function handler_base() {
         this.handlers = {};
     }
-
     handler_base.prototype = {
         constructor: handler_base,
-        addHandler: function addHandler(type, handler) {
+        add: function add(type, handler) {
             if (typeof this.handlers[type] == 'undefined') {
                 this.handlers[type] = new Array();
             }
             this.handlers[type].push(handler);
         },
-        removeHandler: function removeHandler(type, handler) {
+        remove: function remove(type, handler) {
             if (this.handlers[type] instanceof Array) {
                 var handlers = this.handlers[type];
                 for (var i = 0, len = handlers.length; i < len; i++) {
@@ -46,16 +45,16 @@
                 }
             }
         },
-        clearHandler: function clearHandler(type) {
+        clear: function clear(type) {
             if (this.handlers[type] instanceof Array) {
                 this.handlers[type] = undefined;
             }
         },
-        trigger: function trigger(event, sender) {
+        trigger: function trigger(event, sender, args) {
             if (this.handlers[event] instanceof Array) {
                 var handlers = this.handlers[event];
                 for (var i = 0, len = handlers.length; i < len; i++) {
-                    handlers[i](sender);
+                    handlers[i].call(sender, sender, args);
                 }
             }
         }
@@ -88,13 +87,20 @@
         flyout_hide();
     };
     var flyout_hide = function flyout_hide() {
+        // hiding
+        var flyout = $("div[data-control='flyoutbase']")[0].children[0];
+        var parent = flyout_curr.parent;
+        var hidingargs = {
+            prevent_hide: false,
+            flyout: flyout
+        };
+        if (parent.context != undefined && parent.context.events != undefined) parent.context.events.trigger("flyout_hiding", parent, hidingargs);
+        if (hidingargs.prevent_hide) return;
+
         window.removeEventListener("resize", windowresizing, false);
         $("div[data-control='flyoutlayer']").removeClass("flyoutshow");
-        if (flyout_curr == undefined) return;
-        if (flyout_curr.parent.context != undefined && flyout_curr.parent.context.events != undefined) flyout_curr.parent.context.events.trigger("flyoutHide", {
-            context: flyout_curr,
-            flyout: $("div[data-control='flyoutbase']")[0].children[0]
-        });
+
+        if (parent.context != undefined && parent.context.events != undefined) parent.context.events.trigger("flyout_hide", parent, {});
         flyout_curr = undefined;
         flyout_pos_curr = undefined;
     };
@@ -103,23 +109,35 @@
         var position = "bottom";
         var _p = dataset_helper.read(context.item, "place");
         if (_p) position = _p;
+        var parent = context.parent;
+        // showing
+        var showingargs = {
+            flyout: context.item,
+            prevent_show: false,
+            position: position
+        };
+        if (parent.context != undefined && parent.context.events != undefined) parent.context.events.trigger("flyout_showing", parent, showingargs);
+        if (showingargs.prevent_show) return;
+
+        // show flyout
         flyout_curr = context;
         flyout_pos_curr = position;
         $("div[data-control='flyoutlayer']").addClass("flyoutshow");
         var base = $("div[data-control='flyoutbase']")[0];
         base.innerHTML = "";
         base.appendChild(context.item);
-        var top = $(context.parent).offset().top + context.parent.offsetHeight + 5;
+        var top = $(parent).offset().top + parent.offsetHeight + 5;
         if (position == "top") {
-            top = $(context.parent).offset().top - base.offsetHeight - 5;
+            top = $(parent).offset().top - base.offsetHeight - 5;
         }
-        var left = $(context.parent).offset().left;
+        var left = $(parent).offset().left;
         var itemwidth = context.item.offsetWidth + parseInt(getStyle(base, "paddingLeft"), 10) + parseInt(getStyle(base, "paddingRight"), 10);
         if (left + itemwidth + 10 > $(window).width()) left = $(window).width() - 10 - itemwidth;
         base.style.top = top + "px";
         base.style.left = left + "px";
-        if (context.parent.context != undefined && context.parent.context.events != undefined) context.parent.context.events.trigger("flyoutShow", {
-            context: context,
+
+        // showed
+        if (parent.context != undefined && parent.context.events != undefined) parent.context.events.trigger("flyout_showed", parent, {
             flyout: base.children[0]
         });
         window.addEventListener("resize", windowresizing, false);
@@ -138,6 +156,7 @@
             showFlyout: flyout_show,
             hideFlyout: flyout_hide
         };
+        item.context = context;
         obj.context.flyout = context;
     };
     var flyout_global_init = function flyout_global_init() {
@@ -164,7 +183,7 @@
         var button = this;
         if (dataset_helper.read(button, "enabled") == false || dataset_helper.read(button, "enabled") == "false") return;
         if (button.context.flyout != undefined) button.context.flyout.showFlyout();
-        button.context.events.trigger("click", button);
+        button.context.events.trigger("click", button, {});
     };
     var button_init = function button_init(parent) {
         $(parent).find("div[data-control='button']").each(function () {
@@ -198,6 +217,8 @@
         dataset_helper.set(box, "selectedindex", i);
         $(box.children[0].children[i]).addClass("selected");
         if ($(box).hasClass("expand") == false) box.children[0].style.top = "-" + box.children[0].children[i].offsetTop + "px";
+
+        this.events.trigger("selection_changed", box, { action: "programmatic", selected_index: i, selected_item: box.children[0].children[i] });
     };
     var listbox_span_click = function listbox_span_click(e) {
         var span = e.currentTarget;
@@ -212,10 +233,20 @@
         }
         var lindex = dataset_helper.read(listbox, "selectedindex");
         if (lindex != undefined) lindex = parseInt(lindex, 10);else lindex = -1;
+        if (lindex == index) {
+            listbox.blur();
+            return;
+        };
+
         if (lindex >= 0) $(listbox_div.children[lindex]).removeClass("selected");
         dataset_helper.set(listbox, "selectedindex", index);
         $(listbox_div.children[index]).addClass("selected");
         listbox.blur();
+        listbox.context.events.trigger("selection_changed", listbox, {
+            action: "user_selection",
+            selected_index: index,
+            selected_item: listbox_div.children[index]
+        });
     };
     var listbox_collp = function listbox_collp(e) {
         var b = e.currentTarget;
@@ -290,9 +321,10 @@
 
             box.context = {
                 self: box,
-                selectedItem: listbox_selectedItem,
-                selectedIndex: listbox_selectedIndex,
-                set_selected: listbox_set_selected
+                selected_item: listbox_selectedItem,
+                selected_index: listbox_selectedIndex,
+                set_selection: listbox_set_selected,
+                events: new handler_base()
             };
 
             $(box).focus(listbox_expand);
@@ -311,8 +343,13 @@
         dataset_helper.set(select, "selectedindex", i);
         $(select.children[0].children[0].children[i]).addClass("selected");
         if ($(select).hasClass("expand")) select.children[0].scrollTop = select.children[0].children[0].children[i].offsetTop;else select.children[0].children[0].style.top = "-" + select.children[0].children[0].children[i].offsetTop + "px";
-    };
 
+        select.context.events.trigger("selection_changed", select, {
+            action: "programmatic",
+            selected_index: i,
+            selected_item: select.children[0].children[0].children[i]
+        });
+    };
     var select_selectedItem = function select_selectedItem() {
         var select = this.self;
         var selected = parseInt(this.selectedIndex());
@@ -332,12 +369,22 @@
         }
         var lindex = dataset_helper.read(select, "selectedindex");
         if (lindex != undefined) lindex = parseInt(lindex, 10);else lindex = -1;
+
+        if (lindex == index) {
+            select.blur();
+            return;
+        }
+
         if (lindex >= 0) $(select_div.children[0].children[lindex]).removeClass("selected");
 
         dataset_helper.set(select, "selectedindex", index);
         $(select_div.children[0].children[index]).addClass("selected");
         select.blur();
-        if (index != lindex) select.context.events.trigger("changed", select);
+        select.context.events.trigger("selection_changed", select, {
+            action: "user_selection",
+            selected_index: index,
+            selected_item: select_div.children[0].children[index]
+        });
     };
     var select_focus = function select_focus() {
         var select = this;
@@ -417,7 +464,7 @@
                 self: select,
                 selectedItem: select_selectedItem,
                 selectedIndex: listbox_selectedIndex,
-                set_selected: select_set_selected,
+                set_selection: select_set_selected,
                 events: new handler_base()
             };
 
@@ -445,6 +492,10 @@
             innerbox.checked = true;
             dataset_helper.set(checkbox, "checked", true);
         }
+        box.context.events.trigger("changed", checkbox, {
+            action: "programmatic",
+            checked: innerbox.checked
+        });
     };
     var checkbox_click = function checkbox_click(e) {
         var box = e.currentTarget;
@@ -456,6 +507,10 @@
             checkbox.checked = true;
             dataset_helper.set(box, "checked", true);
         }
+        box.context.events.trigger("changed", box, {
+            action: "user_selection",
+            checked: checkbox.checked
+        });
     };
     var checkbox_init = function checkbox_init(parent) {
         var holder;
@@ -489,7 +544,7 @@
                 dataset_helper.set(div, "checked", false);
             }
             div.context = {
-                setChecked: checkbox_setchecked,
+                set_checked: checkbox_setchecked,
                 self: div,
                 events: new handler_base(),
                 checked: checkbox_getchecked
@@ -506,7 +561,8 @@
             picker.innerHTML = "";
             $(picker).focus(datepicker_focus);
             picker.context = {
-                setDate: datepicker_setdate,
+                set_date: datepicker_setdate,
+                get_date: datepicker_getdate,
                 self: picker,
                 events: new handler_base()
             };
@@ -697,7 +753,10 @@
         }
         dataset_helper.set(datepicker, "datevalue", newyear + "/" + monthbegin + "/" + daybegin);
         datepicker.children[0].children[0].innerText = newyear + " 年 " + monthbegin + " 月 " + daybegin + " 日";
-        datepicker.context.events.trigger("change", datepicker);
+        datepicker.context.events.trigger("changed", datepicker, {
+            action: "user_selection",
+            date: { year: valyear, month: monthbegin, day: daybegin }
+        });
     };
     var datepicker_month_clicked = function datepicker_month_clicked() {
         var monthp = this;
@@ -743,7 +802,10 @@
         dataset_helper.set(datepicker, "datevalue", valyear + "/" + newmonth + "/" + daybegin);
         datect.scrollTop = 0;
         datepicker.children[0].children[0].innerText = valyear + " 年 " + newmonth + " 月 " + daybegin + " 日";
-        datepicker.context.events.trigger("change", datepicker);
+        datepicker.context.events.trigger("changed", datepicker, {
+            action: "user_selection",
+            date: { year: valyear, month: newmonth, day: daybegin }
+        });
     };
     var datepicker_day_clicked = function datepicker_day_clicked() {
         var datep = this;
@@ -762,7 +824,10 @@
         datep.className = "selected";
         dataset_helper.set(datepicker, "datevalue", valyear + "/" + valmonth + "/" + datep.innerText);
         datepicker.children[0].children[0].innerText = valyear + " 年 " + valmonth + " 月 " + datep.innerText + " 日";
-        datepicker.context.events.trigger("change", datepicker);
+        datepicker.context.events.trigger("changed", datepicker, {
+            action: "user_selection",
+            date: { year: valyear, month: valmonth, day: datep.innerText }
+        });
     };
     var datepicker_focus = function datepicker_focus() {
         var picker = this;
@@ -876,8 +941,24 @@
 
         dataset_helper.set(picker, "datevalue", valyear + "/" + valmonth + "/" + valday);
         picker.children[0].children[0].innerText = valyear + " 年 " + valmonth + " 月 " + valday + " 日";
-        picker.context.events.trigger("change", picker);
+        picker.context.events.trigger("changed", picker, {
+            action: "programmatic",
+            date: { year: valyear, month: valmonth, day: valday }
+        });
         return true;
+    };
+    var datepicker_getdate = function datepicker_getdate() {
+        var picker = this.self;
+        var date = dataset_helper.read(picker, "datevalue");
+        var dates = date.split("/");
+        var valyear = parseInt(dates[0], 10);
+        var valmonth = parseInt(dates[1], 10);
+        var valday = parseInt(dates[2], 10);
+        return {
+            year: valyear,
+            month: valmonth,
+            day: valday
+        };
     };
     //#endregion
 
