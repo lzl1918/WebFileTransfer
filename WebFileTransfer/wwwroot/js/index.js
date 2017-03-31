@@ -241,7 +241,7 @@
         path_container = $("#path_container")[0];
 
         $(input_filter).keyup($.debounce(debounce_delay, makefilter));
-        btn_reset.context.events.addHandler("click", clearfilter);
+        btn_reset.context.events.add("click", clearfilter);
 
         query_files("");
     };
