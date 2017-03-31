@@ -13,8 +13,9 @@
     <script src="lib/jquery-ext/jquery.fileDownload.js"></script>
     <script src="lib/jquery-ext/jquery.throttle-debounce.min.js"></script>
     <script src="lib/npstrap/js/controls.min.js"></script>
-    <script src="js/icon.js"></script>
-    <script src="js/index.js"></script>
+    <script src="js/icon.es5.min.js"></script>
+    <script src="js/index.es5.min.js"></script>
+    <script src="js/upload.js"></script>
 </head>
 <body>
     <div class="main-container">
@@ -29,14 +30,40 @@
                 <input id="input_filter" type="text" />
                 <div id="btn_reset" data-control="button" data-text="清除"></div>
             </div>
-            <p id="p_cnts" style="margin-top: 1em">{0}个文件夹, {1}个文件</p>
+            <div style="margin-top: 1em">
+                <div id="btn_upload" data-control="button" data-text="上传">
+                    <div class="upload-flyout" data-control="flyout">
+                        <div class="upload-pick-container">
+                            <input class="upload-input-filename" type="text" />
+                            <input class="upload-pick-input" type="file" style="display: none" />
+                            <div class="upload-btn-pick" data-control="button" data-text="选择文件"></div>
+                        </div>
+                        <div class="upload-preview-container">
+                            <img class="upload-pic-preivew" />
+                        </div>
+                        <div class="upload-progress-container">
+                            <div class="upload-progress">
+                                <div class="upload-progress-real"></div>
+                            </div>
+                            <div class="upload-progress-indicator-container">
+                                <p class="upload-progress-indicator">0%</p>
+                            </div>
+                        </div>
+                        <div class="upload-control-container">
+                            <div class="upload-btn-ok" data-control="button" data-text="确认上传"></div>
+                        </div>
+                    </div>
+                </div>
+                <p id="p_cnts" style="display: inline">{0}个文件夹, {1}个文件</p>
+                
+            </div>
         </div>
         <div class="list-container">
             <div>
                 <div id="list_dirs" class="list directory">
                 </div>
                 <div id="list_files" class="list file">
-                    
+
                 </div>
             </div>
         </div>

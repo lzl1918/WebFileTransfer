@@ -8,6 +8,7 @@ using System.IO;
 using System.Text.RegularExpressions;
 using Microsoft.Net.Http.Headers;
 using WebFileTransfer.Results;
+using Microsoft.AspNetCore.Http;
 
 namespace WebFileTransfer.Controllers
 {
@@ -19,8 +20,6 @@ namespace WebFileTransfer.Controllers
         [HttpPost]
         public ServiceData Data([FromBody] PathParam path)
         {
-            
-
             if (GlobalConfig.Enabled == false)
                 return null;
 
@@ -108,7 +107,7 @@ namespace WebFileTransfer.Controllers
                     Stream fs = System.IO.File.OpenRead(filepath);
                     ExtFileStreamResult fsr = new ExtFileStreamResult(fs, "application/octet-stream");
                     fsr.FileDownloadName = Path.GetFileName(filepath);
-                    
+
                     return fsr;
                 }
                 catch
@@ -121,7 +120,18 @@ namespace WebFileTransfer.Controllers
                 return new BadRequestResult();
         }
 
+        [HttpPost]
+        public void Up([FromForm] string fileName, [FromForm] string filePath, [FromForm] IList<IFormFile> files)
+        {
+            if (GlobalConfig.Enabled == false) return;
+            if (files.Count <= 0) return;
+        }
 
+
+        private bool VerifyPath(string path)
+        {
+
+        }
         private FileData FileDataFromInfo(FileInfo file)
         {
             return new FileData()

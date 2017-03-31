@@ -1,4 +1,4 @@
-﻿(function () {
+﻿(function (window) {
     "use strict";
     var debounce_delay = 250;
 
@@ -246,5 +246,10 @@
         query_files("");
     };
 
+    window.control = {
+        get_path: getpath,
+        query_files: query_files
+    };
+
     window.addEventListener("load", load, false);
-})();
+})(window);

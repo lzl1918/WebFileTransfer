@@ -6,5 +6,9 @@
   {
     "outputFile": "wwwroot/js/index.es5.js",
     "inputFile": "wwwroot/js/index.js"
+  },
+  {
+    "outputFile": "wwwroot/js/icon.es5.js",
+    "inputFile": "wwwroot/js/icon.js"
   }
 ]

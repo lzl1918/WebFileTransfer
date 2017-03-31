@@ -212,3 +212,86 @@ div.list {
 div.directory > div.item > span.itemsize {
     display: none;
 }
+
+.upload-flyout {
+    .flex-col(stretch);
+    width: 20em;
+    height: 14em;
+
+    .upload-pick-container {
+        .flex-row(stretch);
+        flex-grow: 0;
+        flex-shrink: 0;
+
+        & > input {
+            flex-grow: 1;
+            flex-shrink: 1;
+        }
+
+        & > div {
+            flex-grow: 0;
+            flex-shrink: 0;
+        }
+    }
+
+    .upload-control-container {
+        .flex-row(stretch);
+        flex-grow: 0;
+        flex-shrink: 0;
+
+        div {
+            flex-grow: 0;
+        }
+    }
+
+    .upload-preview-container {
+        .flex-row(center);
+        margin: 0.3em;
+        margin-bottom: 0.6em;
+        overflow: hidden;
+        flex-grow: 1;
+        flex-shrink: 1;
+        justify-content: center;
+    }
+
+    .upload-pic-preivew {
+        max-height: 100%;
+        max-width: 100%;
+    }
+
+    .upload-progress-container {
+        .flex-row(stretch);
+        justify-content: center;
+        position: relative;
+        margin: 0 0.3em;
+        height: 1em;
+        flex-grow: 0;
+        flex-shrink: 0;
+    }
+
+    .upload-progress {
+        flex-grow: 1;
+        flex-shrink: 1;
+        background: #ccc;
+        overflow: hidden;
+
+        .upload-progress-real {
+            width: 0%;
+            position: relative;
+            height: 100%;
+            background: #003567;
+        }
+    }
+
+    .upload-progress-indicator-container {
+        flex-grow: 0;
+        flex-shrink: 0;
+        font-size: 0.9em;
+        align-self: center;
+        margin-left: 0.3em;
+
+        p {
+            margin: 0;
+        }
+    }
+}
