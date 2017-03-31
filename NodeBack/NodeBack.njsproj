@@ -28,9 +28,18 @@
     <DebugSymbols>true</DebugSymbols>
   </PropertyGroup>
   <ItemGroup>
+    <Compile Include="modules\configreader.js" />
+    <Compile Include="modules\pipeline.js" />
+    <Compile Include="modules\processor\defaultfile.js" />
+    <Compile Include="modules\processor\staticfile.js" />
     <Compile Include="server.js" />
+    <Content Include="config.json" />
     <Content Include="package.json" />
     <Content Include="README.md" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="modules\" />
+    <Folder Include="modules\processor\" />
   </ItemGroup>
   <!-- Do not delete the following Import Project.  While this appears to do nothing it is a marker for setting TypeScript properties before our import that depends on them. -->
   <Import Project="$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)\TypeScript\Microsoft.TypeScript.targets" Condition="False" />
