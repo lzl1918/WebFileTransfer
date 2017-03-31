@@ -3,7 +3,7 @@ var mime = require('mime');
 var fs = require('fs');
 
 var staticfile = function (config) {
-    this.wwwroot = path.normalize(config.wwwroot);
+    this.wwwroot = path.resolve(config.wwwroot);
 };
 
 var staticfile_process = function (req, res) {

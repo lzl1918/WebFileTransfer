@@ -31,9 +31,12 @@
     <Compile Include="modules\configreader.js" />
     <Compile Include="modules\pipeline.js" />
     <Compile Include="modules\processor\defaultfile.js" />
+    <Compile Include="modules\processor\filequery.js" />
+    <Compile Include="modules\processor\fileupload.js" />
     <Compile Include="modules\processor\staticfile.js" />
     <Compile Include="server.js" />
     <Content Include="config.json" />
+    <Compile Include="modules\processor\filedownload.js" />
     <Content Include="package.json" />
     <Content Include="README.md" />
   </ItemGroup>

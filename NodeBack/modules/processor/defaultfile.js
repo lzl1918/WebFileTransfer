@@ -4,7 +4,7 @@ var path = require('path');
 var fs = require('fs');
 
 var defaultfile = function (config) {
-    this.wwwroot = path.normalize(config.wwwroot);
+    this.wwwroot = path.resolve(config.wwwroot);
 };
 
 var defaultfile_process = function (req, res) {
