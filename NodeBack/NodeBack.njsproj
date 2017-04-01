@@ -30,6 +30,7 @@
   <ItemGroup>
     <Compile Include="modules\configreader.js" />
     <Compile Include="modules\pipeline.js" />
+    <Compile Include="modules\processor\createdir.js" />
     <Compile Include="modules\processor\defaultfile.js" />
     <Compile Include="modules\processor\filequery.js" />
     <Compile Include="modules\processor\fileupload.js" />
