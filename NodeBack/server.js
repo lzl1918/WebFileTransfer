@@ -6,13 +6,15 @@ var http = require('http');
 
 var filequery = require('./modules/processor/filequery');
 var filedownload = require('./modules/processor/filedownload');
-var fileupload = require('./modules/processor/fileupload');
+//var fileupload = require('./modules/processor/fileupload');
+var createdir = require('./modules/processor/createdir');
 
 pipeline.use_default();
 pipeline.use_static();
 pipeline.add(new filequery.filequery(config.file_root, '/api/filedata/data'));
 pipeline.add(new filedownload.filedownload(config.file_root, '/api/filedata/down'));
-pipeline.add(new fileupload.fileupload(config.file_root, '/api/filedata/up'));
+//pipeline.add(new fileupload.fileupload(config.file_root, '/api/filedata/up'));
+pipeline.add(new createdir.createdir(config.file_root, '/api/filedata/createdir'));
 
 http.createServer(function (req, res) {
     // go through the pipe line 

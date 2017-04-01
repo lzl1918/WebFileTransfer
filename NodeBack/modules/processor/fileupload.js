@@ -13,6 +13,8 @@ var fileupload = function (fileroot, url) {
 var fileupload_process = function (req, res) {
     if (req.method !== 'POST') return false;
     if (startswith(req.url, this.url) === false) return false;
+
+    return true;
 };
 
 fileupload.prototype = {
