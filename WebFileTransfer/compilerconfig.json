@@ -10,5 +10,13 @@
   {
     "outputFile": "wwwroot/js/icon.es5.js",
     "inputFile": "wwwroot/js/icon.js"
+  },
+  {
+    "outputFile": "wwwroot/js/upload.es5.js",
+    "inputFile": "wwwroot/js/upload.js"
+  },
+  {
+    "outputFile": "wwwroot/js/createdir.es5.js",
+    "inputFile": "wwwroot/js/createdir.js"
   }
 ]

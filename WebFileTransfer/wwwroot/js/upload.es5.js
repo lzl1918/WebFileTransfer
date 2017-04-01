@@ -1,9 +1,11 @@
-﻿(function (window) {
+﻿"use strict";
+
+(function (window) {
     "use strict";
     var url = "/api/filedata/up";
 
     var uploading = false;
-    var upload_flyout_showed = function (sender, args) {
+    var upload_flyout_showed = function upload_flyout_showed(sender, args) {
         sender.context.events.add("flyout_hiding", upload_flyout_hiding);
         sender.context.events.add("flyout_hide", upload_flyout_hide);
 
@@ -36,16 +38,12 @@
             var windowURL = window.URL || window.webkitURL;
 
             if (files.length > 0) {
-                if (files.length > 1)
-                    $input_filename.val("多个文件");
-                else
-                    $input_filename.val(files[0].name);
+                if (files.length > 1) $input_filename.val("多个文件");else $input_filename.val(files[0].name);
                 btn_ok.context.set_enabled(true);
 
                 var dataurl = windowURL.createObjectURL(this.files[0]);
                 preview_img.src = dataurl;
-            }
-            else {
+            } else {
                 $input_filename.val("");
                 btn_ok.context.set_enabled(false);
                 preview_img.src = "";
@@ -54,8 +52,7 @@
         btn_ok.context.events.add("click", function (sender, args) {
             uploading = true;
             var data = new FormData();
-            for (var i = 0; i < $input_file[0].files.length; i++)
-                data.append("files[]", $input_file[0].files[i]);
+            for (var i = 0; i < $input_file[0].files.length; i++) data.append("files[]", $input_file[0].files[i]);
             data.append("fileName", $input_filename.val());
             data.append("filePath", window.control.get_path());
             $.ajax({
@@ -64,16 +61,16 @@
                 processData: false,
                 contentType: false,
                 data: data,
-                success: function (data) {
+                success: function success(data) {
                     uploading = false;
                     window.control.query_files(window.control.get_path());
                     upload_sender.context.flyout.hideFlyout();
                 },
-                error: function (err) {
+                error: function error(err) {
                     alert("upload error");
                     uploading = false;
                 },
-                xhr: function () {
+                xhr: function xhr() {
                     var xhr = $.ajaxSettings.xhr();
                     if (xhr.upload) {
                         xhr.upload.addEventListener("progress", function (evt) {
@@ -89,11 +86,10 @@
             });
         });
     };
-    var upload_flyout_hiding = function (sender, args) {
-        if (uploading === true)
-            args.prevent_hide = true;
+    var upload_flyout_hiding = function upload_flyout_hiding(sender, args) {
+        if (uploading === true) args.prevent_hide = true;
     };
-    var upload_flyout_hide = function (sender, args) {
+    var upload_flyout_hide = function upload_flyout_hide(sender, args) {
         sender.context.events.clear("flyout_hiding");
         sender.context.events.clear("flyout_hide");
 
@@ -104,14 +100,14 @@
         var $input_file = flyout.find(".upload-pick-input");
         var $input_filename = flyout.find(".upload-input-filename");
 
-
         btn_pick.context.events.clear("click");
         $input_file.unbind("change");
         btn_ok.context.events.clear("click");
     };
 
-    var load = function () {
+    var load = function load() {
         $("#btn_upload")[0].context.events.add("flyout_showed", upload_flyout_showed);
     };
     window.addEventListener("load", load, false);
 })(window);
+

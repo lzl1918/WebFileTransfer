@@ -16,6 +16,7 @@ namespace WebFileTransfer.Controllers
     public class FileDataController : Controller
     {
         private static Regex driveMatch = new Regex(@"^\w:");
+        private static Regex invalidMatch = new Regex(@"[\\\/\:\*\?\""\<\>\|]");
 
         [HttpPost]
         public ServiceData Data([FromBody] PathParam path)
@@ -121,17 +122,90 @@ namespace WebFileTransfer.Controllers
         }
 
         [HttpPost]
-        public void Up([FromForm] string fileName, [FromForm] string filePath, [FromForm] IList<IFormFile> files)
+        public void Up([FromForm] string fileName, [FromForm] string filePath, [FromForm] IFormFileCollection files)
         {
             if (GlobalConfig.Enabled == false) return;
+            if (files.Count <= 0)
+                files = Request.Form.Files;
             if (files.Count <= 0) return;
+
+            if (filePath.StartsWith(GlobalConfig.FileRoot) == true)
+                filePath = filePath.Substring(GlobalConfig.FileRoot.Length);
+            if (filePath.StartsWith("\\") == true)
+                filePath = filePath.Substring(1);
+            if (filePath.StartsWith("..") == true)
+                return;
+            if (driveMatch.Match(filePath).Success == true)
+                return;
+            string path = Path.Combine(GlobalConfig.FileRoot, filePath);
+            path = PathHelper.ResolvePath(path);
+            if (path == null)
+                return;
+            if (path.StartsWith(GlobalConfig.FileRoot) == false)
+                return;
+
+            if (files.Count == 1)
+            {
+                fileName = fileName ?? files[0].FileName;
+                string fullPath = Path.Combine(path, fileName);
+                if (System.IO.File.Exists(fullPath))
+                    return;
+                FileStream stream = System.IO.File.Create(fullPath);
+                files[0].CopyTo(stream);
+                stream.Flush();
+                stream.Dispose();
+            }
+            else
+            {
+                string fullPath = null;
+                foreach (IFormFile file in files)
+                {
+                    fullPath = Path.Combine(path, file.FileName);
+                    if (System.IO.File.Exists(fullPath))
+                        continue;
+                    FileStream stream = System.IO.File.Create(fullPath);
+                    file.CopyTo(stream);
+                    stream.Flush();
+                    stream.Dispose();
+                }
+            }
         }
 
-
-        private bool VerifyPath(string path)
+        [HttpPost]
+        public void CreateDir([FromBody] NameParam name)
         {
+            if (invalidMatch.IsMatch(name.Name))
+                return;
 
+            if (name.Path.StartsWith(GlobalConfig.FileRoot) == true)
+                name.Path = name.Path.Substring(GlobalConfig.FileRoot.Length);
+            if (name.Path.StartsWith("\\") == true)
+                name.Path = name.Path.Substring(1);
+            if (name.Path.StartsWith("..") == true)
+                return;
+            if (driveMatch.Match(name.Path).Success == true)
+                return;
+            string path = Path.Combine(GlobalConfig.FileRoot, name.Path);
+            path = PathHelper.ResolvePath(path);
+            if (path == null)
+                return;
+            if (path.StartsWith(GlobalConfig.FileRoot) == false)
+                return;
+            string[] dirs = Directory.GetDirectories(path);
+            string lower = name.Name.ToLower();
+            if (dirs.Any((str) => str.ToLower() == lower)) return;
+            try
+            {
+                DirectoryInfo dir = new DirectoryInfo(path);
+                dir.CreateSubdirectory(name.Name);
+
+            }
+            catch
+            {
+
+            }
         }
+
         private FileData FileDataFromInfo(FileInfo file)
         {
             return new FileData()

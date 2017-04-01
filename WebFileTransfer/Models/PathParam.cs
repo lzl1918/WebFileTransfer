@@ -9,4 +9,10 @@ namespace WebFileTransfer.Models
     {
         public string Path { get; set; }
     }
+
+    public sealed class NameParam
+    {
+        public string Name { get; set; }
+        public string Path { get; set; }
+    }
 }

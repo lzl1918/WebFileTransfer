@@ -15,7 +15,8 @@
     <script src="lib/npstrap/js/controls.min.js"></script>
     <script src="js/icon.es5.min.js"></script>
     <script src="js/index.es5.min.js"></script>
-    <script src="js/upload.js"></script>
+    <script src="js/upload.es5.min.js"></script>
+    <script src="js/createdir.es5.min.js"></script>
 </head>
 <body>
     <div class="main-container">
@@ -35,7 +36,7 @@
                     <div class="upload-flyout" data-control="flyout">
                         <div class="upload-pick-container">
                             <input class="upload-input-filename" type="text" />
-                            <input class="upload-pick-input" type="file" style="display: none" />
+                            <input class="upload-pick-input" type="file" style="display: none" multiple />
                             <div class="upload-btn-pick" data-control="button" data-text="选择文件"></div>
                         </div>
                         <div class="upload-preview-container">
@@ -54,8 +55,14 @@
                         </div>
                     </div>
                 </div>
+                <div id="btn_createdir" data-control="button" data-text="新建目录">
+                    <div data-control="flyout" class="createdir-flyout">
+                        <input class="createdir-name" type="text" />
+                        <div class="createdir-ok" data-control="button" data-text="确认"></div>
+                    </div>
+                </div>
                 <p id="p_cnts" style="display: inline">{0}个文件夹, {1}个文件</p>
-                
+
             </div>
         </div>
         <div class="list-container">

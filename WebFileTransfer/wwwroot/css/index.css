@@ -293,3 +293,20 @@ div.directory > div.item > span.itemsize {
 .upload-flyout .upload-progress-indicator-container p {
   margin: 0;
 }
+.createdir-flyout {
+  display: flex;
+  -ms-flex-flow: row nowrap;
+  -webkit-flex-flow: row nowrap;
+  flex-flow: row nowrap;
+  align-items: center;
+  width: 20em;
+  height: 4em;
+}
+.createdir-flyout .createdir-name {
+  flex-grow: 1;
+  flex-shrink: 1;
+}
+.createdir-flyout .createdir-ok {
+  flex-grow: 0;
+  flex-shrink: 0;
+}

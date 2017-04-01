@@ -248,7 +248,10 @@
 
     window.control = {
         get_path: getpath,
-        query_files: query_files
+        query_files: query_files,
+        get_dirs: function () {
+            return data_directories.map(function (dir) { return dir.name; });
+        }
     };
 
     window.addEventListener("load", load, false);

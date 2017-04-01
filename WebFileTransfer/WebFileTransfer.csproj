@@ -9,6 +9,11 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Content Include="wwwroot\js\createdir.js" />
+    <Content Include="wwwroot\js\upload.js" />
+  </ItemGroup>
+
+  <ItemGroup>
     <Folder Include="wwwroot\images\" />
   </ItemGroup>
   <ItemGroup>
