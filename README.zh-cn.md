@@ -16,7 +16,7 @@ asp.net core webapi
 ## 如何使用
 1. 配置根路径
 
-    修改 appsettings.json 中的 FileRoot
+    修改 appsettings.json 中的 ContentRoot
 
 2. 修改监听url和端口
 

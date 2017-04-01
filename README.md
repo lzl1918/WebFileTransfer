@@ -14,9 +14,9 @@ asp.net core webapi
 click to check the platform supported by [.net core](https://www.microsoft.com/net/core)
 
 ## How to use
-1. Configure the file root path
+1. Configure the content root path
 
-    Edit ` FileRoot ` option in file appsettings.json 
+    Edit ` ContentRoot ` option in file appsettings.json 
 
 2. Configure the listening url and port
 

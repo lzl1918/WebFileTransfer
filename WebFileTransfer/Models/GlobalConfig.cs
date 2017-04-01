@@ -7,8 +7,8 @@ namespace WebFileTransfer.Models
 {
     public static class GlobalConfig
     {
-        public static string FileRoot { get; set; }
-        public static string RootName { get { return System.IO.Path.GetFileName(FileRoot); } }
+        public static string ContentRoot { get; set; }
+        public static string RootName { get { return System.IO.Path.GetFileName(ContentRoot); } }
         public static bool Enabled { get; set; }
 
 

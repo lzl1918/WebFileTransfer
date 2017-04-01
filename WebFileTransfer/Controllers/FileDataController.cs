@@ -30,8 +30,8 @@ namespace WebFileTransfer.Controllers
             ServiceData data = new ServiceData();
             path.Path = path.Path ?? "";
 
-            if (path.Path.StartsWith(GlobalConfig.FileRoot) == true)
-                path.Path = path.Path.Substring(GlobalConfig.FileRoot.Length);
+            if (path.Path.StartsWith(GlobalConfig.ContentRoot) == true)
+                path.Path = path.Path.Substring(GlobalConfig.ContentRoot.Length);
             if (path.Path.StartsWith("\\") == true)
                 path.Path = path.Path.Substring(1);
             if (path.Path.StartsWith("..") == true)
@@ -39,7 +39,7 @@ namespace WebFileTransfer.Controllers
             if (driveMatch.Match(path.Path).Success == true)
                 return null;
 
-            string folderpath = Path.Combine(GlobalConfig.FileRoot, path.Path);
+            string folderpath = Path.Combine(GlobalConfig.ContentRoot, path.Path);
             if (path.Path.Trim().Length <= 0)
                 data.Path = GlobalConfig.RootName;
             else
@@ -80,8 +80,8 @@ namespace WebFileTransfer.Controllers
 
             path = path ?? "";
 
-            if (path.StartsWith(GlobalConfig.FileRoot) == true)
-                path = path.Substring(GlobalConfig.FileRoot.Length);
+            if (path.StartsWith(GlobalConfig.ContentRoot) == true)
+                path = path.Substring(GlobalConfig.ContentRoot.Length);
 
             if (path.StartsWith("\\") == true)
                 path = path.Substring(1);
@@ -94,7 +94,7 @@ namespace WebFileTransfer.Controllers
             string filepath = null;
             try
             {
-                filepath = Path.Combine(GlobalConfig.FileRoot, path);
+                filepath = Path.Combine(GlobalConfig.ContentRoot, path);
             }
             catch
             {
@@ -129,19 +129,19 @@ namespace WebFileTransfer.Controllers
                 files = Request.Form.Files;
             if (files.Count <= 0) return;
 
-            if (filePath.StartsWith(GlobalConfig.FileRoot) == true)
-                filePath = filePath.Substring(GlobalConfig.FileRoot.Length);
+            if (filePath.StartsWith(GlobalConfig.ContentRoot) == true)
+                filePath = filePath.Substring(GlobalConfig.ContentRoot.Length);
             if (filePath.StartsWith("\\") == true)
                 filePath = filePath.Substring(1);
             if (filePath.StartsWith("..") == true)
                 return;
             if (driveMatch.Match(filePath).Success == true)
                 return;
-            string path = Path.Combine(GlobalConfig.FileRoot, filePath);
+            string path = Path.Combine(GlobalConfig.ContentRoot, filePath);
             path = PathHelper.ResolvePath(path);
             if (path == null)
                 return;
-            if (path.StartsWith(GlobalConfig.FileRoot) == false)
+            if (path.StartsWith(GlobalConfig.ContentRoot) == false)
                 return;
 
             if (files.Count == 1)
@@ -177,19 +177,19 @@ namespace WebFileTransfer.Controllers
             if (invalidMatch.IsMatch(name.Name))
                 return;
 
-            if (name.Path.StartsWith(GlobalConfig.FileRoot) == true)
-                name.Path = name.Path.Substring(GlobalConfig.FileRoot.Length);
+            if (name.Path.StartsWith(GlobalConfig.ContentRoot) == true)
+                name.Path = name.Path.Substring(GlobalConfig.ContentRoot.Length);
             if (name.Path.StartsWith("\\") == true)
                 name.Path = name.Path.Substring(1);
             if (name.Path.StartsWith("..") == true)
                 return;
             if (driveMatch.Match(name.Path).Success == true)
                 return;
-            string path = Path.Combine(GlobalConfig.FileRoot, name.Path);
+            string path = Path.Combine(GlobalConfig.ContentRoot, name.Path);
             path = PathHelper.ResolvePath(path);
             if (path == null)
                 return;
-            if (path.StartsWith(GlobalConfig.FileRoot) == false)
+            if (path.StartsWith(GlobalConfig.ContentRoot) == false)
                 return;
             string[] dirs = Directory.GetDirectories(path);
             string lower = name.Name.ToLower();
