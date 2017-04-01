@@ -1,6 +1,12 @@
 # WebFileTransfer
 File listing and downloading service hosted in the web
 
+## Capabilities
+- List contents
+- Download files
+- Upload files
+- Make new directory
+
 ## Architecture
 asp.net core webapi
 
@@ -35,6 +41,5 @@ click to check the platform supported by [.net core](https://www.microsoft.com/n
 
 ## Improvement remained
 - Security
-- Upload files to server
 - More file icons
 - Display the requests in console window

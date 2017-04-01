@@ -36,7 +36,6 @@
     <Compile Include="modules\processor\transfer\list.js" />
     <Compile Include="modules\processor\transfer\upload.js" />
     <Compile Include="modules\processor\default_processor\staticfile.js" />
-    <Compile Include="modules\public\hpath.js" />
     <Compile Include="server.js" />
     <Content Include="config.json" />
     <Compile Include="modules\processor\transfer\download.js" />

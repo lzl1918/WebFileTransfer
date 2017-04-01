@@ -1,6 +1,11 @@
 # WebFileTransfer
 Web端文件查看以及下载服务
 
+## 功能
+- 文件/目录查看
+- 文件下载
+- 文件上产
+- 创建目录
 
 ## 架构
 asp.net core webapi
@@ -36,6 +41,5 @@ asp.net core webapi
 
 ## Improvement remained
 - 安全性
-- 上传功能
 - 文件图标
 - 控制台log显示数据传输状态
