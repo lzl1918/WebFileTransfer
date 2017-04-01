@@ -1,5 +1,9 @@
 {
-  "port":  5001,
-  "file_root": ".",
+  "port": 5001,
+
+  "content_root": ".",
+
+  "upload_tmp": ".",
+
   "wwwroot": "../WebFileTransfer/wwwroot"
 }

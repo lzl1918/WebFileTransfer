@@ -3,6 +3,9 @@ var mime = require('mime');
 var fs = require('fs');
 
 var staticfile = function (config) {
+    if (!(config && config.wwwroot))
+        throw new Error("invalid config for static files");
+
     this.wwwroot = path.resolve(config.wwwroot);
 };
 

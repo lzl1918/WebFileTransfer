@@ -1,18 +1,17 @@
 
-var pipeline_usestatic = function () {
+var pipeline_usestatic = function (config) {
     if (this.used_static) return;
-    this.add(require('./processor/staticfile').create(this.config));
+    this.add(require('./processor/default_processor/staticfile').create(config));
     this.used_static = true;
 };
-var pipeline_usedefault = function () {
+var pipeline_usedefault = function (config) {
     if (this.used_default) return;
-    this.add(require('./processor/defaultfile').create(this.config));
+    this.add(require('./processor/default_processor/defaultfile').create(config));
     this.used_default = true;
 };
 
 
-var pipeline = function (config) {
-    this.config = config;
+var pipeline = function () {
     this.pipe = [];
 };
 
@@ -37,8 +36,8 @@ pipeline.prototype = {
     use_default: pipeline_usedefault
 };
 
-var create_pipeline = function (config) {
-    return new pipeline(config);
+var create_pipeline = function () {
+    return new pipeline();
 };
 
 module.exports = {

@@ -1,27 +1,51 @@
 'use strict';
 
-var config = require('./modules/configreader').read();
-var pipeline = require('./modules/pipeline').create(config);
 var http = require('http');
 var path = require('path');
 var fs = require('fs');
 
-var filequery = require('./modules/processor/filequery');
-var filedownload = require('./modules/processor/filedownload');
-var fileupload = require('./modules/processor/fileupload');
-var createdir = require('./modules/processor/createdir');
+var config = require('./modules/configreader').read();
 
-pipeline.use_default();
-pipeline.use_static();
-pipeline.add(new filequery.filequery(config.file_root, '/api/filedata/data'));
-pipeline.add(new filedownload.filedownload(config.file_root, '/api/filedata/down'));
+var pipeline = require('./modules/pipeline').create();
 
-pipeline.add(new createdir.createdir(config.file_root, '/api/filedata/createdir'));
+// default files
+pipeline.use_default({
+    wwwroot: config.wwwroot,
+    default_files: ["index.html", "index.htm", "index"]
+});
 
-var uploadtmp = path.resolve(config.file_root);
-uploadtmp = path.join(uploadtmp, "tmp");
-if (!fs.existsSync(uploadtmp)) fs.mkdirSync(uploadtmp);
-pipeline.add(new fileupload.fileupload(config.file_root, uploadtmp, '/api/filedata/up'));
+// static files
+pipeline.use_static({
+    wwwroot: config.wwwroot
+});
+
+var transfer = require('./modules/processor/transfer');
+
+// file listing
+pipeline.add(transfer.list.create({
+    content_root: config.content_root,
+    method: 'POST',
+    listen: '/api/filedata/data'
+}));
+// file downloading
+pipeline.add(transfer.download.create({
+    content_root: config.content_root,
+    method: 'POST',
+    listen: '/api/filedata/down'
+}));
+// directory creation
+pipeline.add(transfer.createdir.create({
+    content_root: config.content_root,
+    method: 'POST',
+    listen: '/api/filedata/createdir'
+}));
+// file uploading
+pipeline.add(transfer.upload.create({
+    content_root: config.content_root,
+    upload_temp: config.upload_tmp,
+    method: 'POST',
+    listen: '/api/filedata/up'
+}));
 
 http.createServer(function (req, res) {
     // go through the pipe line 
